@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "scikit-build", "pybind11"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "AdaptivePDHG"
+version = "1.0.0"
+description = "Solving Convex Composite Optimization Problems with Inexact PDHG with focus on Trace-bounded SDPs"
+authors = [
+  { name = "Karthik Prakhya", email = "karthik.prakhya@umu.se" }
+]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11"
+urls = { "Homepage" = "https://github.com/KarthikPrakhya/InexactPDHG-SDP" }
+
+dependencies = [
+  "cvxpy>=1.5.0",
+  "matplotlib>=3.8.0",
+  "numpy>=1.24.0",
+  "pandas>=2.0.0",
+  "scikit-learn>=1.3.0",
+  "scipy>=1.10.0",
+  "torch>=2.0.0",
+  "pybind11>=2.11.0",
+  "scikit-build>=0.17.0",
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+]
+
+[project.optional-dependencies]
+gpu = [
+  "cupy-cuda13x>=14.1.1",
+  "pylibraft-cu13>=26.6.0",
+]
+
+[tool.setuptools]
+packages = ["algorithms", "datautils", "scripts"]
+
+[project.scripts]
+run_inexact_pdhg_maxcut = "scripts.maxcut.run_inexact_pdhg_maxcut:main"
+
+
+# -------------------------------------------------------------------
+# Pytest configuration
+# -------------------------------------------------------------------
+[tool.pytest.ini_options]
+pythonpath = [
+  ".",                     # treat project root as importable
+]
+testpaths = [
+  "tests",                 # where pytest looks for tests
+]
+addopts = "-v --disable-warnings --maxfail=1 --cov=algorithms --cov-report=term-missing"
+
+# You can also add patterns here if your test files don't all start with test_
+# python_files = ["test_*.py", "*_test.py"]
+
+# -------------------------------------------------------------------
+# Coverage configuration
+# -------------------------------------------------------------------
+[tool.coverage.run]
+branch = true
+source = ["algorithms"]
+omit = [
+  "*/__init__.py",
+  "tests/*"
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+precision = 2
